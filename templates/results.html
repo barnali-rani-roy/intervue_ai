@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Interview Results • InterVue AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+<!-- ==========================================
+                NAVIGATION
+=========================================== -->
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <span class="brand-dot"></span>
+
+        INTERVUE AI
+
+    </div>
+
+    <div class="nav-links">
+
+        {% if session.user_id %}
+
+            <span class="welcome">
+
+                Welcome, {{ session.user_name }}
+
+            </span>
+
+            <a href="{{ url_for('home') }}">Home</a>
+
+            <a href="/logout">Logout</a>
+
+        {% else %}
+
+            <a href="/login">Login</a>
+
+            <a href="/register">Register</a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+
+<!-- ==========================================
+                HERO SECTION
+=========================================== -->
+
+<section class="result-header">
+
+    <div class="result-top">
+
+        <div class="result-left">
+
+            <span class="result-eyebrow">
+                INTERVIEW COMPLETED
+            </span>
+
+            <h1 class="result-title">
+                Your Interview Performance Report
+            </h1>
+
+            <p class="result-subtitle">
+                Congratulations on completing your AI interview.
+                Below is your complete AI performance analysis
+                including technical evaluation, strengths,
+                improvement areas and question-wise feedback.
+            </p>
+
+            <div class="pass-badge {{ 'pass' if passed else 'fail' }}">
+                {% if passed %}
+                    ✓ PASSED
+                {% else %}
+                    ✕ NEEDS IMPROVEMENT
+                {% endif %}
+            </div>
+
+        </div>
+
+
+        <div class="result-right">
+
+            <div class="big-ring-wrap">
+
+                <svg width="190"
+                     height="190"
+                     viewBox="0 0 190 190">
+
+                    <circle
+                        cx="95"
+                        cy="95"
+                        r="82"
+                        fill="none"
+                        stroke="#ececec"
+                        stroke-width="15"/>
+
+                    <circle
+                        cx="95"
+                        cy="95"
+                        r="82"
+                        fill="none"
+                        stroke="{{ '#16a34a' if passed else '#dc2626' }}"
+                        stroke-width="15"
+                        stroke-linecap="round"
+                        stroke-dasharray="{{ 2 * 3.14159 * 82 }}"
+                        stroke-dashoffset="{{ 2 * 3.14159 * 82 * (1 - percentage/100) }}"
+                        transform="rotate(-90 95 95)"/>
+
+                </svg>
+
+                <div class="ring-label">
+
+                    <div class="ring-pct">
+                        {{ percentage }}%
+                    </div>
+
+                    <div class="ring-sub">
+                        Overall Score
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- ==========================================
+                MAIN CONTENT
+=========================================== -->
+
+<main class="container">
+
+
+
+<!-- ==========================================
+            QUICK OVERVIEW
+=========================================== -->
+
+<section class="result-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+
+                PERFORMANCE OVERVIEW
+
+            </span>
+
+            <h2>
+
+                Interview Statistics
+
+            </h2>
+
+        </div>
+
+        <span class="section-description">
+
+            A quick summary of your interview performance.
+
+        </span>
+
+    </div>
+
+
+
+<!-- ==========================================
+            QUICK STATISTICS
+=========================================== -->
+
+<div class="stats-grid">
+        <!-- TOTAL SCORE -->
+
+    <div class="stat-box">
+
+        <div class="stat-icon">
+
+            🏆
+
+        </div>
+
+        <div class="val">
+
+            {{ total_score }} / {{ max_score }}
+
+        </div>
+
+        <div class="lbl">
+
+            Total Score
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TIME -->
+
+    <div class="stat-box">
+
+        <div class="stat-icon">
+
+            ⏱️
+
+        </div>
+
+        <div class="val">
+
+            {{ total_time }}s
+
+        </div>
+
+        <div class="lbl">
+
+            Total Time
+
+        </div>
+
+    </div>
+
+
+
+    <!-- QUESTIONS -->
+
+    <div class="stat-box">
+
+        <div class="stat-icon">
+
+            ❓
+
+        </div>
+
+        <div class="val">
+
+            {{ answers|length }}
+
+        </div>
+
+        <div class="lbl">
+
+            Questions Answered
+
+        </div>
+
+    </div>
+
+
+
+    <!-- PERFORMANCE -->
+
+    <div class="stat-box">
+
+        <div class="stat-icon">
+
+            📈
+
+        </div>
+
+        <div class="val">
+
+            {{ percentage }}%
+
+        </div>
+
+        <div class="lbl">
+
+            Overall Performance
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+            SKILL BREAKDOWN
+=========================================== -->
+
+<section class="result-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <span class="section-label">
+            PERFORMANCE ANALYSIS
+        </span>
+
+        <h2>
+            Skill Breakdown
+        </h2>
+
+        <p class="section-description">
+            AI analysed your interview responses to evaluate your technical knowledge, coding ability, problem-solving skills and overall interview readiness.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- Skill Summary Cards -->
+
+<div class="summary-grid">
+
+    <div class="summary-card">
+
+        <h4>🎯 Technical Accuracy</h4>
+
+        <h3>
+
+            <span>{{ theory_pct if theory_pct is not none else 0 }}%</span>
+
+        </h3>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <h4>🧠 Problem Solving</h4>
+
+        <h3>
+
+            <span>{{ coding_pct if coding_pct is not none else 0 }}%</span>
+
+        </h3>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <h4>💡 Concept Knowledge</h4>
+
+        <h3>
+
+            <span>{{ percentage }}%</span>
+
+        </h3>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <h4>🏆 Overall Rating</h4>
+
+        <h3>
+
+            <span>
+
+                {% if percentage >= 80 %}
+
+                    Excellent
+
+                {% elif percentage >= 60 %}
+
+                    Good
+
+                {% elif percentage >= 40 %}
+
+                    Average
+
+                {% else %}
+
+                    Beginner
+
+                {% endif %}
+
+            </span>
+
+        </h3>
+
+    </div>
+
+</div>
+
+
+    {% if theory_pct is not none %}
+
+    <div class="skill-bar-row">
+
+        <div class="label-row">
+
+            <span>
+                Theory & Concepts
+
+            </span>
+
+            <strong>
+                {{ theory_pct }}%
+            </strong>
+
+        </div>
+
+        <div class="skill-bar-track">
+
+            <div
+                class="skill-bar-fill"
+                style="width: {{ theory_pct }}%;">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    {% if coding_pct is not none %}
+
+    <div class="skill-bar-row">
+
+        <div class="label-row">
+
+            <span>
+                Coding & Problem Solving
+            </span>
+
+            <strong>
+                {{ coding_pct }}%
+            </strong>
+
+        </div>
+
+        <div class="skill-bar-track">
+
+            <div
+                class="skill-bar-fill"
+                style="width: {{ coding_pct }}%;">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+<!-- ==========================================
+            AI INSIGHTS
+=========================================== -->
+
+<section class="result-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+
+                AI INSIGHTS
+
+            </span>
+
+            <h2>
+
+                Strengths & Areas to Improve
+
+            </h2>
+
+        </div>
+
+        <span class="section-description">
+
+            Based on your interview performance.
+
+        </span>
+
+    </div>
+
+
+
+    <div class="sw-grid">
+
+
+
+        <!-- STRENGTHS -->
+
+        <div class="sw-col strengths">
+
+            <div class="insight-icon">
+
+                ✅
+
+            </div>
+
+            <h4>
+
+                Your Strengths
+
+            </h4>
+
+            <ul>
+
+                {% for s in strengths %}
+
+                    <li>{{ s }}</li>
+
+                {% else %}
+
+                    <li style="color:var(--text-muted)">
+
+                        No strengths identified yet.
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+
+        <!-- IMPROVEMENTS -->
+
+        <div class="sw-col weaknesses">
+
+            <div class="insight-icon">
+
+                📚
+
+            </div>
+
+            <h4>
+
+                Areas to Improve
+
+            </h4>
+
+            <ul>
+
+                {% for w in weaknesses %}
+
+                    <li>{{ w }}</li>
+
+                {% else %}
+
+                    <li style="color:var(--text-muted)">
+
+                        Excellent performance. Keep practising!
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+            QUESTION REVIEW
+=========================================== -->
+
+<section class="result-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+
+                DETAILED FEEDBACK
+
+            </span>
+
+            <h2>
+
+                Question-by-Question Review
+
+            </h2>
+
+        </div>
+
+        <span class="section-description">
+
+            AI evaluation for every interview question.
+
+        </span>
+
+    </div>
+                {% for a in answers %}
+
+            <article class="qa-item">
+
+                <div class="qa-top">
+
+                    <div class="question-number">
+
+                        {{ "%02d"|format(loop.index) }}
+
+                    </div>
+
+                    <div class="qa-question">
+
+                        {{ a.question }}
+
+                    </div>
+
+                    <div class="qa-score">
+
+{{ a.score }}/{{ a.max_score }}
+
+</div>
+
+<div class="question-progress">
+
+<div class="question-progress-fill"
+
+style="width: {{ (a.score/a.max_score*100) if a.max_score else 0 }}%;">
+
+</div>
+
+</div>
+
+                </div>
+
+                <div class="qa-feedback">
+
+                    {{ a.feedback }}
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+</section>
+
+
+
+<!-- ==========================================
+            FINAL SUMMARY
+=========================================== -->
+
+<section class="result-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+
+                FINAL RESULT
+
+            </span>
+
+            <h2>
+
+                Overall Assessment
+
+            </h2>
+
+        </div>
+
+        <span class="section-description">
+
+            AI generated interview conclusion.
+
+        </span>
+
+    </div>
+
+
+    <div class="final-result-card">
+
+        {% if passed %}
+
+        <div class="result-status success">
+
+            🎉 Congratulations!
+
+        </div>
+
+        <p>
+
+            You have successfully completed the interview with a
+            satisfactory performance. Your responses demonstrate
+            a good understanding of the required concepts.
+            Continue practising technical questions and coding
+            problems to become even more confident in future
+            interviews.
+
+        </p>
+
+        {% else %}
+
+        <div class="result-status warning">
+
+            📚 Keep Learning!
+
+        </div>
+
+        <p>
+
+            This interview highlighted a few areas where you can
+            improve. Review the AI feedback above, practise the
+            concepts you found difficult, and attempt another
+            interview after some preparation. Consistent practice
+            is the key to success.
+
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+            ACTION BUTTONS
+=========================================== -->
+
+<div class="result-actions">
+
+    <a href="{{ url_for('home') }}"
+
+       class="btn">
+
+        Start Another Interview →
+
+    </a>
+
+</div>
+
+</main>
+
+
+
+<!-- ==========================================
+                FOOTER
+=========================================== -->
+
+<footer class="footer">
+
+    <p>
+
+        © 2026 <strong>InterVue AI</strong>.
+        AI-Powered Interview Preparation Platform.
+
+    </p>
+
+</footer>
+
+</body>
+
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="home-page">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+
+    <div class="brand">
+        <span class="brand-dot"></span>
+        INTERVUE AI
+    </div>
+
+    <div class="nav-links">
+
+        {% if session.user_id %}
+
+            <span class="welcome">
+                Welcome, {{ session.user_name }}
+            </span>
+
+            <a href="/">Home</a>
+            <a href="/logout">Logout</a>
+
+        {% else %}
+
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+
+
+<!-- HERO SECTION -->
+<section class="hero">
+
+    <div class="hero-badge">
+        <span class="status-dot"></span>
+        AI-POWERED INTERVIEW PRACTICE
+    </div>
+
+    <h1>
+        Practice smarter.<br>
+        <span>Perform better.</span>
+    </h1>
+
+    <p>
+        Experience realistic technical interviews with voice-enabled questions,
+        coding challenges, timed rounds, and intelligent performance analysis.
+    </p>
+
+    <div class="feature-row">
+
+        <span class="badge">
+            <span>◉</span> Voice Enabled
+        </span>
+
+        <span class="badge">
+            <span>✦</span> AI Evaluation
+        </span>
+
+        <span class="badge">
+            <span>◷</span> Timed Rounds
+        </span>
+
+        <span class="badge">
+            <span>▣</span> Detailed Report
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- MAIN CONTENT -->
+<main class="container">
+
+    {% if error %}
+        <p class="center error-message">{{ error }}</p>
+    {% endif %}
+
+
+    <div class="section-heading">
+
+        <div>
+            <p class="eyebrow">CHOOSE YOUR PATH</p>
+
+            <h2>
+                Select an interview track
+            </h2>
+        </div>
+
+    </div>
+
+
+    <form id="startForm" action="/start" method="POST">
+
+        <input
+            type="hidden"
+            name="track"
+            id="trackInput"
+            value="python"
+        >
+
+
+        <div class="tracks-grid">
+
+            {% for t in tracks %}
+
+            <div
+                class="track-card {% if loop.first %}selected{% endif %}"
+                data-track="{{ t.key }}"
+                onclick="selectTrack('{{ t.key }}', this)"
+            >
+
+                <div class="track-card-top">
+
+                    <div class="track-icon">
+
+                        {% if t.key == "python" %}
+                            </span>Py
+                        {% elif t.key == "web" %}
+                            </span>&lt;/&gt;
+                        {% elif t.key == "sql" %}
+                            </span>DB
+                        {% else %}
+                            </span>AI
+                        {% endif %}
+
+                    </div>
+
+                    <div class="selection-indicator">
+                        ✓
+                    </div>
+
+                </div>
+
+
+                <h3>
+                    {{ t.label }}
+                </h3>
+
+
+                <p class="track-description">
+
+                    {% if t.key == "python" %}
+                        Test your Python fundamentals, logic, and coding ability.
+                    {% elif t.key == "web" %}
+                        Explore HTML, CSS, JavaScript, and web development concepts.
+                    {% elif t.key == "sql" %}
+                        Challenge your database knowledge and SQL query skills.
+                    {% else %}
+                        Test your technical knowledge and problem-solving ability.
+                    {% endif %}
+
+                </p>
+
+
+                <div class="track-meta">
+
+                    <span>
+                        ◷ {{ t.duration }} min
+                    </span>
+
+                    <span>
+                        ◆ {{ t.difficulty }}
+                    </span>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="start-section">
+
+            <button
+                type="submit"
+                class="btn start-btn"
+            >
+
+                Start Interview
+
+                <span class="btn-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+        </div>
+
+    </form>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+
+    <span>
+        INTERVUE AI
+    </span>
+
+    <span>
+        Built for better technical interview preparation
+    </span>
+
+</footer>
+
+
+<script>
+
+function selectTrack(key, element) {
+
+    document.getElementById("trackInput").value = key;
+
+    document
+        .querySelectorAll(".track-card")
+        .forEach(card => {
+
+            card.classList.remove("selected");
+
+        });
+
+    element.classList.add("selected");
+
+}
+
+</script>
+
+</body>
+</html>

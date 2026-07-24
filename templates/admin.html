@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Intervue AI | Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+    <main class="main">
+
+
+        <!-- =========================
+             TOP HEADER
+        ========================== -->
+
+        <header class="topbar">
+
+
+            <div class="logo">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <span>Intervue AI</span>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <div class="admin-profile">
+
+
+                    <div class="admin-avatar">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+                    <div class="admin-info">
+
+                        <strong>Administrator</strong>
+
+                        <span>System Admin</span>
+
+                    </div>
+
+
+                </div>
+
+
+                <a href="/logout"
+                   class="logout-btn">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Logout
+
+                </a>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =========================
+             WELCOME SECTION
+        ========================== -->
+
+        <section class="welcome">
+
+
+            <h1>
+
+                Good Evening,
+
+                <span>Admin.</span>
+
+            </h1>
+
+
+            <p>
+
+                Monitor candidate performance and interview intelligence
+                from one central dashboard.
+
+            </p>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             STATISTICS CARDS
+        ========================== -->
+
+        <section class="cards">
+
+
+            <!-- Total Candidates -->
+
+            <div class="card">
+
+
+                <div class="icon blue">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+
+                <h2>
+
+                    {{ total_users }}
+
+                </h2>
+
+
+                <p>
+
+                    Total Candidates
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- Completed Interviews -->
+
+            <div class="card">
+
+
+                <div class="icon green">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                </div>
+
+
+                <h2>
+
+                    {{ total_interviews }}
+
+                </h2>
+
+
+                <p>
+
+                    Completed Interviews
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- Failed Interviews -->
+
+            <div class="card">
+
+
+                <div class="icon orange">
+
+                    <i class="fa-solid fa-chart-line-down"></i>
+
+                </div>
+
+
+                <h2>
+
+                    {{ failed }}
+
+                </h2>
+
+
+                <p>
+
+                    Failed Interviews
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- Passed Interviews -->
+
+            <div class="card">
+
+
+                <div class="icon red">
+
+                    <i class="fa-solid fa-trophy"></i>
+
+                </div>
+
+
+                <h2>
+
+                    {{ passed }}
+
+                </h2>
+
+
+                <p>
+
+                    Passed Interviews
+
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             CANDIDATE RECORDS
+        ========================== -->
+
+        <section class="table-section">
+
+
+            <div class="section-header">
+
+
+                <h2>
+
+                    Recent Interview Performance
+
+                </h2>
+
+
+                <input type="text"
+                       id="searchBox"
+                       placeholder="Search candidate...">
+
+
+            </div>
+
+
+
+            <table>
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th>Name</th>
+
+                        <th>Email</th>
+
+                        <th>Course</th>
+
+                        <th>Score</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for row in recent %}
+
+<tr>
+
+    <td>{{ row[1] }}</td>
+
+    <td>{{ row[2] }}</td>
+
+    <td>{{ row[3] }}</td>
+
+    <td>{{ row[4] }}%</td>
+
+    <td>{{ row[5] }}</td>
+
+    <td>
+
+        <button
+            class="view-btn"
+            data-id="{{ row[0] }}">
+
+            <i class="fa-solid fa-eye"></i>
+
+            View
+
+        </button>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+                </tbody>
+
+
+            </table>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             AI INSIGHT SECTION
+        ========================== -->
+
+        <section class="details-card">
+
+
+            <h2>
+
+                AI Performance Insight
+
+            </h2>
+
+
+            <div id="candidateDetails">
+
+
+                <p>
+
+                    Select a candidate to view detailed interview
+                    performance insights.
+
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+
+    </main>
+
+
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+
+</body>
+
+</html>

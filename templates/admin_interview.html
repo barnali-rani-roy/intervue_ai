@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Interview Details | Intervue AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
+
+</head>
+
+
+<body>
+
+
+<main class="main">
+
+
+    <a href="/admin"
+       class="logout-btn"
+       style="display: inline-flex; margin-bottom: 30px;">
+
+        ← Back to Dashboard
+
+    </a>
+
+
+    <section class="welcome">
+
+        <h1>
+
+            Interview
+
+            <span>Details.</span>
+
+        </h1>
+
+        <p>
+
+            Complete performance overview of the candidate.
+
+        </p>
+
+    </section>
+
+
+    <section class="details-card">
+
+
+        <h2>
+
+            {{ interview[1] }}
+
+        </h2>
+
+
+        <p>
+
+            Email: {{ interview[2] }}
+
+        </p>
+
+
+        <p>
+
+            Track: {{ interview[3] }}
+
+        </p>
+
+
+        <p>
+
+            Score:
+
+            {{ interview[4] }}/{{ interview[5] }}
+
+            ({{ interview[6] }}%)
+
+        </p>
+
+
+        <p>
+
+            Status: {{ interview[8] }}
+
+        </p>
+
+
+    </section>
+
+
+    <br>
+
+
+    <section class="table-section">
+
+
+        <div class="section-header">
+
+            <h2>
+
+                Question Performance
+
+            </h2>
+
+        </div>
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Question</th>
+
+                    <th>Candidate Answer</th>
+
+                    <th>Score</th>
+
+                    <th>Feedback</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for answer in answers %}
+
+                <tr>
+
+                    <td>
+
+                        {{ answer[0] }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ answer[1] or "No answer provided" }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ answer[2] }}/{{ answer[3] }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ answer[4] }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

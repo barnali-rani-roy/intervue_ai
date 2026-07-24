@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>InterVue AI | Technical Interview</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- CodeMirror -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/neo.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+<nav class="navbar">
+
+    <div class="brand">
+        <span class="brand-dot"></span>
+        INTERVUE AI
+    </div>
+
+    <div class="nav-links">
+
+        {% if 'user_id' in session %}
+
+            <span class="welcome">
+                Welcome, {{ session.user_name }}
+            </span>
+
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+
+        {% else %}
+
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+    <!-- Interview Section -->
+    <main class="interview-shell">
+
+        <!-- Top Information Bar -->
+        <div class="top-bar">
+
+            <div
+                style="font-size:13px;color:var(--text-muted)"
+                id="qCounter">
+
+                Question 1 of {{ total_questions }}
+
+            </div>
+
+
+            <!-- Progress Bar -->
+            <div class="progress-track">
+
+                <div
+                    class="progress-fill"
+                    id="progressFill">
+                </div>
+
+            </div>
+
+
+            <!-- Timer -->
+            <div
+                class="timer"
+                id="timerDisplay">
+
+                00:00
+
+            </div>
+
+        </div>
+
+
+        <!-- Main Question Card -->
+
+<div class="card" id="mainCard">
+
+    <div id="fullscreenStart">
+
+        <div class="center">
+
+            <h2>Ready to Begin?</h2>
+
+            <p style="color:var(--text-muted);">
+                This interview must be completed in fullscreen mode.
+            </p>
+
+            <button
+                class="btn"
+                onclick="startInterviewFullscreen()">
+
+                Enter Fullscreen & Start Interview →
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+    </main>
+
+
+    <!-- CodeMirror JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js">
+    </script>
+
+
+    <!-- Flask Data for JavaScript -->
+    <script>
+
+        window.INTERVIEW_ID = "{{ interview_id }}";
+
+        window.TOTAL_QUESTIONS = {{ total_questions }};
+
+    </script>
+
+<!-- Hidden Webcam -->
+<script src="https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<video
+    id="webcam"
+    autoplay
+    playsinline
+    muted
+    style="display:none;">
+</video>
+    <!-- Interview Logic -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='js/interview.js') }}">
+    </script>
+
+</body>
+</html>
